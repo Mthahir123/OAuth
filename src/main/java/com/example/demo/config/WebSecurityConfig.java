@@ -29,18 +29,18 @@ import jakarta.servlet.http.HttpServletResponse;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-	@Bean
-	public UserDetailsService userDetailsService() {
-		return new UserDetailsServiceImpl();
-	}
+    @Bean
+    UserDetailsService userDetailsService() {
+        return new UserDetailsServiceImpl();
+    }
 
 	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
+	BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
 	@Bean
-	public DaoAuthenticationProvider authenticationProvider() {
+	DaoAuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 		authProvider.setUserDetailsService(userDetailsService());
 		authProvider.setPasswordEncoder(passwordEncoder());
@@ -54,13 +54,13 @@ public class WebSecurityConfig {
 	private UserService userService;
 	
 	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfiguration) throws Exception {
+	AuthenticationManager authenticationManager(AuthenticationConfiguration authConfiguration) throws Exception {
 		return authConfiguration.getAuthenticationManager();
 	}
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-		http.authorizeRequests().requestMatchers("/", "/login", "/oauth/**").permitAll()
+		http.authorizeHttpRequests().requestMatchers("/", "/login", "/oauth/**").permitAll()
 		.anyRequest().authenticated()
 		.and().formLogin().permitAll().loginPage("/login")
 		.usernameParameter("email")
